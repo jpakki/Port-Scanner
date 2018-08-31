@@ -1,19 +1,6 @@
 import argparse
 from socket import *
 
-parser = argparse.ArgumentParser(usage='-H <target host> -p <target port>')
-
-parser.add_argument('-H', dest='tgtHost', type=str, help='specify target host')
-parser.add_argument('-p', dest='tgtPort', type=int, help='specify target port')
-args = parser.parse_args()
-
-tgtHost = args.tgtHost
-tgtPort = args.tgtPort
-
-if (tgtHost == None)|(tgtPort == None): 
-    print parser.usage
-    exit(0)
-
 def connScan(tgtHost, tgtPort): 
     try: 
         connSkt = socket(AF_INET, SOCK_STREAM)
@@ -45,4 +32,18 @@ def portScan(tgtHost, tgtPorts):
         connScan(tgtHost, int(tgtPort))
 
 def main(): 
-    
+    parser = argparse.ArgumentParser(usage='-H <target host> -p <target port>')
+
+    parser.add_argument('-H', dest='tgtHost', type=str, help='specify target host')
+    parser.add_argument('-p', dest='tgtPort', type=str, help='specify target port(s) separated by comma')
+    args = parser.parse_args()
+
+    tgtHost = args.tgtHost
+    tgtPorts = str(args.tgtPort).split(', ')
+
+    if (tgtHost == None)|(tgtPorts[0] == None): 
+        print parser.usage
+        exit(0)
+    portScan(tgtHost, tgtPorts)
+if __name__ == '__main__':
+    main()
