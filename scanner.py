@@ -18,10 +18,13 @@ def connScan(tgtHost, tgtPort):
     try: 
         connSkt = socket(AF_INET, SOCK_STREAM)
         connSkt.connect((tgtHost, tgtPort))
-        print '[+]%d/tcp open' + tgtPort
+        connSkt.send('ViolentPython\r\n')
+        results = connSkt.recv(100)
+        print '[+]%d/tcp open'% tgtPort
+        print '[+] ' + str(results)
         connSkt.close()
     except: 
-        print '[-]%d/tcp closed' + tgtPort
+        print '[-]%d/tcp closed'% tgtPort
 
 def portScan(tgtHost, tgtPorts): 
     try: 
@@ -36,7 +39,10 @@ def portScan(tgtHost, tgtPorts):
     except: 
         print '\n[+] Scan results for: ' + tgtIP
     setdefaulttimeout(1)
-    
+
     for tgtPort in tgtPorts:
         print 'Scanning port ' + tgtPort
         connScan(tgtHost, int(tgtPort))
+
+def main(): 
+    
