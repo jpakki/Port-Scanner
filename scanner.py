@@ -36,9 +36,13 @@ def portScan(tgtHost, tgtPorts):
 def nmapScan(tgtHost, tgtPort):
     nmscan = nmap.PortScanner()
     nmscan.scan(tgtHost, tgtPort)
-    state = nmscan[tgtHost]['tcp'][int(tgtPort)]['state']
-    print(' [*] ' + tgtHost + ' tcp/' + tgtPort + ' ' + state)
-
+    try:
+        state = nmscan[tgtHost]['tcp'][int(tgtPort)]['state']
+        print(' [*] ' + tgtHost + ' tcp/' + tgtPort + ' ' + state)
+    except KeyError as e:
+        print(e)
+        print('The specified IP address is unreachable')
+        exit()
 
 def main(): 
     parser = argparse.ArgumentParser(usage='-H <target host> -p <target port>')
